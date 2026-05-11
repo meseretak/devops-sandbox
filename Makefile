@@ -16,16 +16,12 @@ up:
 		-v $(ROOT)/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
 		-v $(ROOT)/nginx/conf.d:/etc/nginx/conf.d \
 		nginx:alpine 2>/dev/null || echo "Nginx already running"
-	@docker run -d --name sandbox-api \
-		--network sandbox-net \
-		-p 8080:8080 \
-		-v $(ROOT):/workspace \
-		-w /workspace \
-		-e PLATFORM_PORT=8080 \
-		python:3.12-alpine sh -c "pip install flask gunicorn -q && python platform/api.py" \
-		2>/dev/null || echo "API already running"
+	@pip3 install flask gunicorn -q 2>/dev/null || true
+	@nohup python3 platform/api.py > logs/api.log 2>&1 &
+	@echo "$$!" > logs/api.pid
 	@nohup bash platform/cleanup_daemon.sh > logs/cleanup.log 2>&1 &
 	@nohup python3 monitor/health_poller.py > logs/poller.log 2>&1 &
+	@sleep 2
 	@echo ""
 	@echo "✅ Platform is up!"
 	@echo "   Nginx:  http://localhost:80"
@@ -38,10 +34,12 @@ down:
 	@for f in envs/env-*.json; do \
 		[ -f "$$f" ] && bash platform/destroy_env.sh "$$(basename $$f .json)" || true; \
 	done
-	@docker stop sandbox-nginx sandbox-api 2>/dev/null || true
-	@docker rm   sandbox-nginx sandbox-api 2>/dev/null || true
-	@pkill -f cleanup_daemon.sh 2>/dev/null || true
-	@pkill -f health_poller.py  2>/dev/null || true
+	@docker stop sandbox-nginx 2>/dev/null || true
+	@docker rm   sandbox-nginx 2>/dev/null || true
+	@[ -f logs/api.pid ] && kill $$(cat logs/api.pid) 2>/dev/null || true
+	@pkill -f "platform/api.py"    2>/dev/null || true
+	@pkill -f cleanup_daemon.sh    2>/dev/null || true
+	@pkill -f health_poller.py     2>/dev/null || true
 	@echo "✅ Platform stopped."
 
 # ── Build app image ───────────────────────────────────────────────────────────
