@@ -15,7 +15,7 @@ APP_IMAGE="${APP_IMAGE:-sandbox-app:latest}"
 NGINX_CONF="$ROOT/nginx/conf.d/$ENV_ID.conf"
 STATE_FILE="$ROOT/envs/$ENV_ID.json"
 LOG_DIR="$ROOT/logs/$ENV_ID"
-PORT=$(shuf -i 10000-19999 -n1)
+PORT=$(python3 -c "import random; print(random.randint(10000,19999))")
 
 mkdir -p "$LOG_DIR" "$ROOT/envs"
 
