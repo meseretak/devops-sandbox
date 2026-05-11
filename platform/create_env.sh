@@ -7,6 +7,8 @@ ROOT="$(dirname "$SCRIPT_DIR")"
 source "$ROOT/.env" 2>/dev/null || true
 
 NAME="${1:-sandbox}"
+# Sanitize name — replace spaces and special chars with hyphens
+NAME=$(echo "$NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//')
 TTL="${2:-${DEFAULT_TTL:-1800}}"
 ENV_ID="env-$(date +%s)-$(python3 -c 'import secrets; print(secrets.token_hex(4))')"
 NETWORK="net-$ENV_ID"
