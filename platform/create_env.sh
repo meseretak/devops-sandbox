@@ -13,7 +13,7 @@ TTL="${2:-${DEFAULT_TTL:-1800}}"
 ENV_ID="env-$(date +%s)-$(python3 -c 'import secrets; print(secrets.token_hex(4))')"
 NETWORK="net-$ENV_ID"
 CONTAINER="app-$ENV_ID"
-APP_IMAGE="${APP_IMAGE:-sandbox-app:latest}"
+APP_IMAGE="sandbox-app:latest"
 NGINX_CONF="$ROOT/nginx/conf.d/$ENV_ID.conf"
 STATE_FILE="$ROOT/envs/$ENV_ID.json"
 LOG_DIR="$ROOT/logs/$ENV_ID"
@@ -22,6 +22,7 @@ PORT=$(python3 -c "import random; print(random.randint(10000,19999))")
 mkdir -p "$LOG_DIR" "$ROOT/envs"
 
 echo "[$(date -u +%FT%TZ)] Creating environment: $ENV_ID (name=$NAME, ttl=${TTL}s)"
+echo "[DEBUG] CONTAINER=$CONTAINER APP_IMAGE=$APP_IMAGE PORT=$PORT"
 
 # 1. Create Docker network
 docker network create "$NETWORK" >/dev/null
