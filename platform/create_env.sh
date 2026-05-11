@@ -49,10 +49,12 @@ upstream $ENV_ID {
 server {
     listen 80;
     server_name _;
-    location /$ENV_ID/ {
-        proxy_pass http://$ENV_ID/;
+    location ~* ^/$ENV_ID(/.*)?$ {
+        rewrite ^/$ENV_ID(/.*)?$ /\$1 break;
+        proxy_pass http://$ENV_ID;
         proxy_set_header Host \$host;
         proxy_set_header X-Env-ID $ENV_ID;
+        proxy_set_header X-Real-IP \$remote_addr;
     }
 }
 EOF
