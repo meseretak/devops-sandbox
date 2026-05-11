@@ -16,7 +16,7 @@ up:
 		-v $(ROOT)/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
 		-v $(ROOT)/nginx/conf.d:/etc/nginx/conf.d \
 		nginx:alpine 2>/dev/null || echo "Nginx already running"
-	@pip3 install flask gunicorn -q 2>/dev/null || true
+	@pip3 install flask gunicorn -q --break-system-packages 2>/dev/null || pip3 install flask gunicorn -q 2>/dev/null || true
 	@nohup python3 platform/api.py > logs/api.log 2>&1 &
 	@echo "$$!" > logs/api.pid
 	@nohup bash platform/cleanup_daemon.sh > logs/cleanup.log 2>&1 &
