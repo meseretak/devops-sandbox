@@ -3,7 +3,7 @@
 SHELL := /bin/bash
 ROOT  := $(shell pwd)
 
-# ── Start platform ────────────────────────────────────────────────────────────
+# ── Start platform dine ────────────────────────────────────────────────────────────
 up:
 	@echo "Starting DevOps Sandbox Platform..."
 	@cp -n .env.example .env 2>/dev/null || true

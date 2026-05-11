@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # DevOps Sandbox Platform
 
 A self-service platform for spinning up isolated temporary environments, deploying apps, simulating outages, monitoring health, and auto-destroying everything.
@@ -149,3 +150,6 @@ make clean                    # wipe all state, logs, archives
 - Log shipping uses `docker logs -f` (Approach A) — not suitable for very high volume
 - Nginx reload is synchronous — brief interruption possible during config changes
 - `date -d` flag is Linux-specific — macOS requires `date -r`
+=======
+# devops-sandbox
+>>>>>>> 19e6b315b359b8a0b554b4dfc3f8e61a32c653a0
