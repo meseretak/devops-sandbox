@@ -7,6 +7,7 @@ ROOT  := $(shell pwd)
 up:
 	@echo "Starting DevOps Sandbox Platform..."
 	@cp -n .env.example .env 2>/dev/null || true
+	@mkdir -p logs envs nginx/conf.d
 	@docker network create sandbox-net 2>/dev/null || true
 	@docker build -t sandbox-app:latest ./app
 	@docker run -d --name sandbox-nginx \

@@ -8,7 +8,7 @@ source "$ROOT/.env" 2>/dev/null || true
 
 NAME="${1:-sandbox}"
 TTL="${2:-${DEFAULT_TTL:-1800}}"
-ENV_ID="env-$(date +%s)-$(head -c4 /dev/urandom | xxd -p)"
+ENV_ID="env-$(date +%s)-$(python3 -c 'import secrets; print(secrets.token_hex(4))')"
 NETWORK="net-$ENV_ID"
 CONTAINER="app-$ENV_ID"
 APP_IMAGE="${APP_IMAGE:-sandbox-app:latest}"
