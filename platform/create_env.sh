@@ -29,7 +29,6 @@ docker network create "$NETWORK" >/dev/null
 # 2. Start app container
 docker run -d \
   --name "$CONTAINER" \
-  --network "$NETWORK" \
   --network sandbox-net \
   -e ENV_ID="$ENV_ID" \
   -e ENV_NAME="$NAME" \
@@ -37,6 +36,9 @@ docker run -d \
   -l "sandbox.name=$NAME" \
   -p "$PORT:5000" \
   "$APP_IMAGE" >/dev/null
+
+# Also connect to env-specific network
+docker network connect "$NETWORK" "$CONTAINER" 2>/dev/null || true
 
 # 3. Write Nginx config
 cat > "$NGINX_CONF" <<EOF
