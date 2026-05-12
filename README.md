@@ -48,7 +48,7 @@ Nginx:  nginx/conf.d/<env-id>.conf (auto-generated)
 
 ---
 
-## Quick Start (5 commands)
+## Quick Start (5 commands) doine
 
 ```bash
 git clone https://github.com/meseretak/devops-sandbox.git
